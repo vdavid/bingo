@@ -44,8 +44,8 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
     // Run the simulations
     for (let i = 0; i < simulatedGameCount; i++) {
         let playerSheets: Array<Array<number>> = [];
-        let winnersInCurrentRound: Array<number> = [];
-        let currentRoundWinnerCount = 0;
+        let winnerCountPerRound: Array<number> = [];
+        let totalWinnerCount = 0;
         let firstWin = -1;
         let lastWin = -1;
 
@@ -60,6 +60,7 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
 
         // Check if any player has a bingo after each number is picked
         for (let round = 0; round < allNumbers.length; round++) {
+            let roundWinnerCount = 0;
             // let pickedNumber = allNumbers[round];
 
             for (let player = 0; player < playerSheets.length; player++) {
@@ -67,15 +68,18 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
                     if (firstWin === -1) {
                         firstWin = round;
                     }
-                    currentRoundWinnerCount += 1;
+                    roundWinnerCount += 1;
                     playerSheets.splice(player, 1);  // This player won, remove the sheet from further checks
                     player--;  // Adjust the index after removing an item
                 }
             }
 
-            // Store the number of winners of this round. If all players have won, stop checking.
-            winnersInCurrentRound.push(currentRoundWinnerCount);
-            if (currentRoundWinnerCount >= totalWins) {
+            // Store the number of winners of this round.
+            winnerCountPerRound.push(roundWinnerCount);
+
+            // If all players have won, stop checking.
+            totalWinnerCount += roundWinnerCount;
+            if (totalWinnerCount >= totalWins) {
                 lastWin = round;
                 break;
             }
@@ -83,8 +87,8 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
 
         firstWinRounds.push(firstWin);
         lastWinRounds.push(lastWin);
-        totalWinners.push(currentRoundWinnerCount);
-        winnersInEachRound.push(winnersInCurrentRound);
+        totalWinners.push(totalWinnerCount);
+        winnersInEachRound.push(winnerCountPerRound);
     }
 
     // Calculate the statistics
