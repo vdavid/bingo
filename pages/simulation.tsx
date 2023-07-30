@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { runBingoSimulations, SimulationResults } from '../../modules/bingo/game';
 import BingoSheet from '../../modules/bingo/BingoSheet'
 import styles from '../../modules/bingo/simulation.module.scss'
+import { RandomGenerator } from '../../modules/bingo/RandomGenerator'
 
 const Page = () => {
     const [results, setResults] = useState<SimulationResults | null>(null);
-    const simulationCount = 100;
+    const simulationCount = 1;
 
     useEffect(() => {
-        const results = runBingoSimulations(1, 100, 5, 142, 10, simulationCount);
+        const results = runBingoSimulations(new RandomGenerator(112), 1, 100, 5, 142, 10, simulationCount);
         setResults(results);
     }, []);
 
@@ -40,8 +41,8 @@ const Page = () => {
                             <>
                                 <p>First 25 bingo sheets of the first game:</p>
                                 <div className={styles.bingoSheets}>
-                                    {results.playerSheetsForAllGames[0].slice(0, 25).map((sheet, i) => (
-                                        <BingoSheet key={i} sheet={sheet} size={5} />
+                                    {results.playerSheetsForAllGames[0].slice(0, 100).map((sheet, i) => (
+                                        <BingoSheet key={i} sheet={sheet} size={5} pickedNumbers={results.pickedNumbersForAllGamesAndSheets[0][i]} />
                                     ))}
                                 </div>
                             </>

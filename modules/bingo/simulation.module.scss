@@ -6,13 +6,34 @@
 
 .bingoSheet {
   border: 1px solid #333;
-  margin: 10px;
+  margin: 10px 0;
   text-align: center;
-  min-width: 100px;
+  min-width: 60px;
 }
 
 .bingoSheet tbody tr td {
   border: 1px solid #ddd;
   padding: 5px;
   font-weight: bold;
+}
+
+.bingoCell {
+  font-size: 0.8em;
+  border: 1px solid #ddd;
+  padding: 2px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 0.8em;
+  height: 1em;
+  line-height: 0.8em;
+  text-align: center;
+  margin: 0.5em;
+}
+
+.bingoCell.picked {
+  background-color: yellow;
+}
+
+.bingoCell.winning {
+  background-color: red;
 }

@@ -1,3 +1,5 @@
+import { RandomGenerator } from './RandomGenerator'
+
 export interface SimulationResults {
     firstWinRoundIndexMin: number;
     firstWinRoundIndexAvg: number;
@@ -10,6 +12,7 @@ export interface SimulationResults {
     winnersInAnyRoundAvg: number;
     winnersInWonRoundAvg: number;
     winnersInAnyRoundMax: number;
+    pickedNumbersForAllGamesAndSheets: Array<Array<Array<number>>>;  // For debugging
     playerSheetsForAllGames: Array<Array<Array<number>>>;
     numberOfWinnersInEachRound: Array<Array<number>>;
 }
@@ -17,10 +20,10 @@ export interface SimulationResults {
 /**
  * Generates a bingo sheet with random unique numbers.
  */
-function generateBingoSheet(rangeMin: number, rangeMax: number, bingoSheetSize: number): Array<number> {
+function generateBingoSheet(randomGenerator: RandomGenerator, rangeMin: number, rangeMax: number, bingoSheetSize: number): Array<number> {
     /* Generate a list of numbers from rangeMin to rangeMax, shuffle it and pick the first bingoSheetSize * bingoSheetSize numbers */
     let numbers = Array.from({length: rangeMax - rangeMin + 1}, (_, i) => i + rangeMin);
-    numbers.sort(() => Math.random() - 0.5);
+    numbers.sort(() => randomGenerator.random() - 0.5);
     return numbers.slice(0, bingoSheetSize * bingoSheetSize);
 }
 
@@ -39,15 +42,17 @@ export function checkBingo(sheet: Array<number>, pickedNumbers: Array<number>, b
     return allLines.some(line => line.every(number => pickedNumbers.includes(number)));
 }
 
-export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoSheetSize: number, playerCount: number, totalWins: number, simulatedGameCount: number): SimulationResults {
+export function runBingoSimulations(randomGenerator: RandomGenerator, rangeMin: number, rangeMax: number, bingoSheetSize: number, playerCount: number, totalWins: number, simulatedGameCount: number): SimulationResults {
     let firstWinRounds: Array<number> = [];
     let lastWinRounds: Array<number> = [];
     let totalWinners: Array<number> = [];
     let winnersInEachRound: Array<Array<number>> = [];
     let playerSheetsForAllGames: Array<Array<Array<number>>> = [];
+    let pickedNumbersForAllGamesAndSheets: Array<Array<Array<number>>> = [];
 
     // Run the simulations
     for (let i = 0; i < simulatedGameCount; i++) {
+        pickedNumbersForAllGamesAndSheets.push([]);
         let playerSheets: Array<Array<number>> = [];
         let winnerCountPerRound: Array<number> = [];
         let totalWinnerCount = 0;
@@ -56,12 +61,12 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
 
         // Generate bingo sheets for each player
         for (let j = 0; j < playerCount; j++) {
-            playerSheets.push(generateBingoSheet(rangeMin, rangeMax, bingoSheetSize));
+            playerSheets.push(generateBingoSheet(randomGenerator, rangeMin, rangeMax, bingoSheetSize));
         }
 
         // Generate a list of numbers from rangeMin to rangeMax, and shuffle them, to simulate the order in which numbers are picked
         let allNumbers = Array.from({length: rangeMax - rangeMin + 1}, (_, i) => i + rangeMin);
-        allNumbers.sort(() => Math.random() - 0.5);
+        allNumbers.sort(() => randomGenerator.random() - 0.5);
 
         // Check if any player has a bingo after each number is picked
         for (let round = 0; round < allNumbers.length; round++) {
@@ -69,13 +74,15 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
             // let pickedNumber = allNumbers[round];
 
             for (let player = 0; player < playerSheets.length; player++) {
-                if (checkBingo(playerSheets[player], allNumbers.slice(0, round + 1), bingoSheetSize)) {
-                    if (firstWin === -1) {
-                        firstWin = round;
+                // Check if the player has a bingo after this round but not before
+                if (!checkBingo(playerSheets[player], allNumbers.slice(0, round), bingoSheetSize)) {
+                    pickedNumbersForAllGamesAndSheets[i][player] = allNumbers.slice(0, round + 1);
+                    if (checkBingo(playerSheets[player], allNumbers.slice(0, round + 1), bingoSheetSize)) {
+                        if (firstWin === -1) {
+                            firstWin = round;
+                        }
+                        roundWinnerCount += 1;
                     }
-                    roundWinnerCount += 1;
-                    playerSheets.splice(player, 1);  // This player won, remove the sheet from further checks
-                    player--;  // Adjust the index after removing an item
                 }
             }
 
@@ -122,6 +129,7 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
         winnersInAnyRoundAvg,
         winnersInWonRoundAvg,
         winnersInAnyRoundMax,
+        pickedNumbersForAllGamesAndSheets,
         playerSheetsForAllGames,
         numberOfWinnersInEachRound: winnersInEachRound
     };
