@@ -7,6 +7,10 @@ export interface SimulationResults {
     lastWinRoundIndexMax: number;
     winnersInLastRoundAvg: number;
     winnersInLastRoundMax: number;
+    winnersInAnyRoundAvg: number;
+    winnersInWonRoundAvg: number;
+    winnersInAnyRoundMax: number;
+    playerSheetsForAllGames: Array<Array<Array<number>>>;
     numberOfWinnersInEachRound: Array<Array<number>>;
 }
 
@@ -40,6 +44,7 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
     let lastWinRounds: Array<number> = [];
     let totalWinners: Array<number> = [];
     let winnersInEachRound: Array<Array<number>> = [];
+    let playerSheetsForAllGames: Array<Array<Array<number>>> = [];
 
     // Run the simulations
     for (let i = 0; i < simulatedGameCount; i++) {
@@ -89,6 +94,7 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
         lastWinRounds.push(lastWin);
         totalWinners.push(totalWinnerCount);
         winnersInEachRound.push(winnerCountPerRound);
+        playerSheetsForAllGames.push(playerSheets);
     }
 
     // Calculate the statistics
@@ -100,6 +106,9 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
     let lastWinRoundIndexMax = Math.max(...lastWinRounds);
     let winnersInLastRoundAvg = totalWinners.reduce((a, b) => a + b, 0) / totalWinners.length;
     let winnersInLastRoundMax = Math.max(...totalWinners);
+    let winnersInAnyRoundAvg = winnersInEachRound.flat().reduce((a, b) => a + b, 0) / winnersInEachRound.flat().length;
+    let winnersInWonRoundAvg = winnersInEachRound.flat().reduce((a, b) => a + b, 0) / winnersInEachRound.flat().filter(a => a > 0).length;
+    let winnersInAnyRoundMax = Math.max(...winnersInEachRound.map(round => Math.max(...round)));
 
     return {
         firstWinRoundIndexMin,
@@ -110,6 +119,10 @@ export function runBingoSimulations(rangeMin: number, rangeMax: number, bingoShe
         lastWinRoundIndexMax,
         winnersInLastRoundAvg,
         winnersInLastRoundMax,
+        winnersInAnyRoundAvg,
+        winnersInWonRoundAvg,
+        winnersInAnyRoundMax,
+        playerSheetsForAllGames,
         numberOfWinnersInEachRound: winnersInEachRound
     };
 }

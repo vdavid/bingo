@@ -2,13 +2,15 @@
 import DefaultLayout from '../../modules/site/DefaultLayout.tsx'
 import { useEffect, useState } from 'react';
 import { runBingoSimulations, SimulationResults } from '../../modules/bingo/game';
+import BingoSheet from '../../modules/bingo/BingoSheet'
+import styles from '../../modules/bingo/simulation.module.scss'
 
 const Page = () => {
     const [results, setResults] = useState<SimulationResults | null>(null);
     const simulationCount = 100;
 
     useEffect(() => {
-        const results = runBingoSimulations(1, 100, 5, 130, 10, simulationCount);
+        const results = runBingoSimulations(1, 100, 5, 142, 10, simulationCount);
         setResults(results);
     }, []);
 
@@ -20,14 +22,30 @@ const Page = () => {
             <main>
                 {results ? (
                     <>
-                        <p>Average number of rounds for first win: {results.firstWinRoundIndexAvg.toFixed(2)}</p>
-                        <p>Minimum number of rounds for first win: {results.firstWinRoundIndexMin}</p>
-                        <p>Maximum number of rounds for first win: {results.firstWinRoundIndexMax}</p>
-                        <p>Average number of rounds for 10 wins: {results.lastWinRoundIndexAvg.toFixed(2)}</p>
-                        <p>Minimum number of rounds for 10 wins: {results.lastWinRoundIndexMin}</p>
-                        <p>Maximum number of rounds for 10 wins: {results.lastWinRoundIndexMax}</p>
-                        <p>Average number of winners in the last round: {results.winnersInLastRoundAvg.toFixed(2)}</p>
-                        <p>Maximum number of winners in the last round: {results.winnersInLastRoundMax}</p>
+                        <p>Stats:</p>
+                        <ul>
+                        <li>Average number of rounds for first win: <strong>{results.firstWinRoundIndexAvg.toFixed(2)}</strong></li>
+                        <li>Minimum number of rounds for first win: <strong>{results.firstWinRoundIndexMin}</strong></li>
+                        <li>Maximum number of rounds for first win: <strong>{results.firstWinRoundIndexMax}</strong></li>
+                        <li>Average number of rounds for 10 wins: <strong>{results.lastWinRoundIndexAvg.toFixed(2)}</strong></li>
+                        <li>Minimum number of rounds for 10 wins: <strong>{results.lastWinRoundIndexMin}</strong></li>
+                        <li>Maximum number of rounds for 10 wins: <strong>{results.lastWinRoundIndexMax}</strong></li>
+                        <li>Average number of winners in the last round: <strong>{results.winnersInLastRoundAvg.toFixed(2)}</strong></li>
+                        <li>Maximum number of winners in the last round: <strong>{results.winnersInLastRoundMax}</strong></li>
+                        <li>Average number of simultaneous wins in any round: <strong>{results.winnersInAnyRoundAvg.toFixed(2)}</strong></li>
+                        <li>Average number of simultaneous wins in rounds won by someone: <strong>{results.winnersInWonRoundAvg.toFixed(2)}</strong></li>
+                        <li>Maximum number of simultaneous wins in any round: <strong>{results.winnersInAnyRoundMax}</strong></li>
+                        </ul>
+                        {results && results.playerSheetsForAllGames && results.playerSheetsForAllGames[0] ? (
+                            <>
+                                <p>First 25 bingo sheets of the first game:</p>
+                                <div className={styles.bingoSheets}>
+                                    {results.playerSheetsForAllGames[0].slice(0, 25).map((sheet, i) => (
+                                        <BingoSheet key={i} sheet={sheet} size={5} />
+                                    ))}
+                                </div>
+                            </>
+                        ) : null}
                         <p>Number of winners in each round:</p>
                         <ul>
                             {results.numberOfWinnersInEachRound.map((roundWinners, index) => (

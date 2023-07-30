@@ -1,0 +1,18 @@
+.bingoSheets {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.bingoSheet {
+  border: 1px solid #333;
+  margin: 10px;
+  text-align: center;
+  min-width: 100px;
+}
+
+.bingoSheet tbody tr td {
+  border: 1px solid #ddd;
+  padding: 5px;
+  font-weight: bold;
+}
