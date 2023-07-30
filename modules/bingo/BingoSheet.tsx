@@ -9,7 +9,7 @@ interface BingoCellProps {
     won: boolean;
 }
 
-const BingoCell: React.FC<BingoCellProps> = ({ sheet, number, picked, won }) => {
+const BingoCell: React.FC<BingoCellProps> = ({ number, picked, won }) => {
     let className = styles.bingoCell;
     if (picked) {
         className += ` ${styles.picked}`;
