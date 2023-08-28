@@ -11,7 +11,7 @@ const Page = () => {
     const simulationCount = 1;
 
     useEffect(() => {
-        const results = runBingoSimulations(new RandomGenerator(112), 1, 100, 5, 142, 10, simulationCount);
+        const results = runBingoSimulations(new RandomGenerator(120), 1, 100, 5, 142, 10, simulationCount);
         setResults(results);
     }, []);
 
