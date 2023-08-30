@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import { runBingoSimulations, SimulationResults } from '../../modules/bingo/game';
 import BingoSheet from '../../modules/bingo/BingoSheet'
 import styles from '../../modules/bingo/simulation.module.scss'
-import { RandomGenerator } from '../../modules/bingo/RandomGenerator'
 
 const Page = () => {
     const [results, setResults] = useState<SimulationResults | null>(null);
     const simulationCount = 1;
+    const seedStart = 37;
 
     useEffect(() => {
-        const results = runBingoSimulations(new RandomGenerator(120), 1, 100, 5, 142, 10, simulationCount);
+        const results = runBingoSimulations(seedStart, 1, 100, 5, 142, 10, simulationCount);
         setResults(results);
     }, []);
 
@@ -39,9 +39,9 @@ const Page = () => {
                         </ul>
                         {results && results.playerSheetsForAllGames && results.playerSheetsForAllGames[0] ? (
                             <>
-                                <p>First 25 bingo sheets of the first game:</p>
+                                <p>First 5 bingo sheets of the first game:</p>
                                 <div className={styles.bingoSheets}>
-                                    {results.playerSheetsForAllGames[0].slice(0, 100).map((sheet, i) => (
+                                    {results.playerSheetsForAllGames[0].slice(0, 5).map((sheet, i) => (
                                         <BingoSheet key={i} sheet={sheet} size={5} pickedNumbers={results.pickedNumbersForAllGamesAndSheets[0][i]} />
                                     ))}
                                 </div>
@@ -49,8 +49,16 @@ const Page = () => {
                         ) : null}
                         <p>Number of winners in each round:</p>
                         <ul>
-                            {results.numberOfWinnersInEachRound.map((roundWinners, index) => (
-                                <li key={index}>Round {index + 1}: {roundWinners.join(',')}</li>
+                            {results.numberOfWinnersInEachRound
+                                // .filter(roundWinners => roundWinners.reduce( (a,b) => a + b, 0) === 11
+                                //     && roundWinners[roundWinners.length - 1] === 2
+                                //     && roundWinners.filter(count => count > 1).length === 1)
+                                .map((roundWinners, index) => (
+                                <li key={index}>Round {index + 1} (seed: {seedStart + index}):<br />
+                                    {roundWinners.join(',')}<br />
+                                    Sum winners: {roundWinners.reduce( (a,b) => a + b, 0)}<br />
+                                    Numbers: {results.pickedNumbersForAllGames[index].join(', ')}
+                                </li>
                             ))}
                         </ul>
                     </>
