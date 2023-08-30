@@ -1,6 +1,6 @@
 import { RandomGenerator } from './RandomGenerator'
 
-export interface SimulationResults {
+export interface SimulationStats {
     firstWinRoundIndexMin: number;
     firstWinRoundIndexAvg: number;
     firstWinRoundIndexMax: number;
@@ -12,6 +12,9 @@ export interface SimulationResults {
     winnersInAnyRoundAvg: number;
     winnersInWonRoundAvg: number;
     winnersInAnyRoundMax: number;
+}
+
+export interface SimulationResults {
     pickedNumbersForAllGamesAndSheets: Array<Array<Array<number>>>;  // For debugging
     playerSheetsForAllGames: Array<Array<Array<number>>>;
     numberOfWinnersInEachRound: Array<Array<number>>;
@@ -44,10 +47,7 @@ export function checkBingo(sheet: Array<number>, pickedNumbers: Array<number>, b
 }
 
 export function runBingoSimulations(seedStart: number, rangeMin: number, rangeMax: number, bingoSheetSize: number, playerCount: number, totalWins: number, simulatedGameCount: number): SimulationResults {
-    let firstWinRounds: Array<number> = [];
-    let lastWinRounds: Array<number> = [];
-    let totalWinners: Array<number> = [];
-    let winnersInEachRound: Array<Array<number>> = [];
+    let numberOfWinnersInEachRound: Array<Array<number>> = [];
     let playerSheetsForAllGames: Array<Array<Array<number>>> = [];
     let pickedNumbersForAllGamesAndSheets: Array<Array<Array<number>>> = [];
     let pickedNumbersForAllGames: Array<Array<number>> = [];
@@ -59,7 +59,6 @@ export function runBingoSimulations(seedStart: number, rangeMin: number, rangeMa
         let playerSheets: Array<Array<number>> = [];
         let winnerCountPerRound: Array<number> = [];
         let totalWinnerCount = 0;
-        let firstWin = -1;
         let lastWin = -1;
 
         // Generate bingo sheets for each player
@@ -82,9 +81,6 @@ export function runBingoSimulations(seedStart: number, rangeMin: number, rangeMa
                 if (!checkBingo(playerSheets[player], allNumbers.slice(0, round), bingoSheetSize)) {
                     pickedNumbersForAllGamesAndSheets[i][player] = allNumbers.slice(0, round + 1);
                     if (checkBingo(playerSheets[player], allNumbers.slice(0, round + 1), bingoSheetSize)) {
-                        if (firstWin === -1) {
-                            firstWin = round;
-                        }
                         roundWinnerCount += 1;
                     }
                 }
@@ -101,15 +97,24 @@ export function runBingoSimulations(seedStart: number, rangeMin: number, rangeMa
             }
         }
 
-        firstWinRounds.push(firstWin);
-        lastWinRounds.push(lastWin);
-        totalWinners.push(totalWinnerCount);
-        winnersInEachRound.push(winnerCountPerRound);
+        numberOfWinnersInEachRound.push(winnerCountPerRound);
         playerSheetsForAllGames.push(playerSheets);
         pickedNumbersForAllGames.push(allNumbers.slice(0, lastWin + 1));
     }
 
-    // Calculate the statistics
+    return {
+        pickedNumbersForAllGamesAndSheets,
+        playerSheetsForAllGames,
+        numberOfWinnersInEachRound,
+        pickedNumbersForAllGames
+    };
+}
+
+export function calculateSimulationStats(simResults: SimulationResults): SimulationStats {
+    let firstWinRounds = simResults.numberOfWinnersInEachRound.map(round => round.findIndex(winnerCount => winnerCount > 0));
+    let lastWinRounds = simResults.pickedNumbersForAllGames.map(pickedNumbers => pickedNumbers.length - 1);
+    let totalWinners = simResults.numberOfWinnersInEachRound.map(round => round.reduce((a, b) => a + b, 0));
+
     let firstWinRoundIndexMin = Math.min(...firstWinRounds);
     let firstWinRoundIndexAvg = firstWinRounds.reduce((a, b) => a + b, 0) / firstWinRounds.length;
     let firstWinRoundIndexMax = Math.max(...firstWinRounds);
@@ -118,9 +123,9 @@ export function runBingoSimulations(seedStart: number, rangeMin: number, rangeMa
     let lastWinRoundIndexMax = Math.max(...lastWinRounds);
     let winnersInLastRoundAvg = totalWinners.reduce((a, b) => a + b, 0) / totalWinners.length;
     let winnersInLastRoundMax = Math.max(...totalWinners);
-    let winnersInAnyRoundAvg = winnersInEachRound.flat().reduce((a, b) => a + b, 0) / winnersInEachRound.flat().length;
-    let winnersInWonRoundAvg = winnersInEachRound.flat().reduce((a, b) => a + b, 0) / winnersInEachRound.flat().filter(a => a > 0).length;
-    let winnersInAnyRoundMax = Math.max(...winnersInEachRound.map(round => Math.max(...round)));
+    let winnersInAnyRoundAvg = simResults.numberOfWinnersInEachRound.flat().reduce((a, b) => a + b, 0) / simResults.numberOfWinnersInEachRound.flat().length;
+    let winnersInWonRoundAvg = simResults.numberOfWinnersInEachRound.flat().reduce((a, b) => a + b, 0) / simResults.numberOfWinnersInEachRound.flat().filter(a => a > 0).length;
+    let winnersInAnyRoundMax = Math.max(...simResults.numberOfWinnersInEachRound.map(round => Math.max(...round)));
 
     return {
         firstWinRoundIndexMin,
@@ -134,9 +139,5 @@ export function runBingoSimulations(seedStart: number, rangeMin: number, rangeMa
         winnersInAnyRoundAvg,
         winnersInWonRoundAvg,
         winnersInAnyRoundMax,
-        pickedNumbersForAllGamesAndSheets,
-        playerSheetsForAllGames,
-        numberOfWinnersInEachRound: winnersInEachRound,
-        pickedNumbersForAllGames
     };
 }

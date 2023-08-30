@@ -1,7 +1,7 @@
 // @ts-ignore
 import DefaultLayout from '../../modules/site/DefaultLayout.tsx'
 import { useEffect, useState } from 'react';
-import { runBingoSimulations, SimulationResults } from '../../modules/bingo/game';
+import { calculateSimulationStats, runBingoSimulations, SimulationResults, SimulationStats } from '../../modules/bingo/game'
 import BingoSheet from '../../modules/bingo/BingoSheet'
 import styles from '../../modules/bingo/simulation.module.scss'
 
@@ -9,10 +9,12 @@ const Page = () => {
     const [results, setResults] = useState<SimulationResults | null>(null);
     const simulationCount = 1;
     const seedStart = 37;
+    const [stats, setStats] = useState<SimulationStats | null>(null);
 
     useEffect(() => {
         const results = runBingoSimulations(seedStart, 1, 100, 5, 142, 10, simulationCount);
         setResults(results);
+        setStats(calculateSimulationStats(results));
     }, []);
 
     return (
@@ -21,21 +23,21 @@ const Page = () => {
                 <h1>Bingo Simulation</h1>
             </header>
             <main>
-                {results ? (
+                {(results && stats) ? (
                     <>
                         <p>Stats:</p>
                         <ul>
-                        <li>Average number of rounds for first win: <strong>{results.firstWinRoundIndexAvg.toFixed(2)}</strong></li>
-                        <li>Minimum number of rounds for first win: <strong>{results.firstWinRoundIndexMin}</strong></li>
-                        <li>Maximum number of rounds for first win: <strong>{results.firstWinRoundIndexMax}</strong></li>
-                        <li>Average number of rounds for 10 wins: <strong>{results.lastWinRoundIndexAvg.toFixed(2)}</strong></li>
-                        <li>Minimum number of rounds for 10 wins: <strong>{results.lastWinRoundIndexMin}</strong></li>
-                        <li>Maximum number of rounds for 10 wins: <strong>{results.lastWinRoundIndexMax}</strong></li>
-                        <li>Average number of winners in the last round: <strong>{results.winnersInLastRoundAvg.toFixed(2)}</strong></li>
-                        <li>Maximum number of winners in the last round: <strong>{results.winnersInLastRoundMax}</strong></li>
-                        <li>Average number of simultaneous wins in any round: <strong>{results.winnersInAnyRoundAvg.toFixed(2)}</strong></li>
-                        <li>Average number of simultaneous wins in rounds won by someone: <strong>{results.winnersInWonRoundAvg.toFixed(2)}</strong></li>
-                        <li>Maximum number of simultaneous wins in any round: <strong>{results.winnersInAnyRoundMax}</strong></li>
+                        <li>Average number of rounds for first win: <strong>{stats.firstWinRoundIndexAvg.toFixed(2)}</strong></li>
+                        <li>Minimum number of rounds for first win: <strong>{stats.firstWinRoundIndexMin}</strong></li>
+                        <li>Maximum number of rounds for first win: <strong>{stats.firstWinRoundIndexMax}</strong></li>
+                        <li>Average number of rounds for 10 wins: <strong>{stats.lastWinRoundIndexAvg.toFixed(2)}</strong></li>
+                        <li>Minimum number of rounds for 10 wins: <strong>{stats.lastWinRoundIndexMin}</strong></li>
+                        <li>Maximum number of rounds for 10 wins: <strong>{stats.lastWinRoundIndexMax}</strong></li>
+                        <li>Average number of winners in the last round: <strong>{stats.winnersInLastRoundAvg.toFixed(2)}</strong></li>
+                        <li>Maximum number of winners in the last round: <strong>{stats.winnersInLastRoundMax}</strong></li>
+                        <li>Average number of simultaneous wins in any round: <strong>{stats.winnersInAnyRoundAvg.toFixed(2)}</strong></li>
+                        <li>Average number of simultaneous wins in rounds won by someone: <strong>{stats.winnersInWonRoundAvg.toFixed(2)}</strong></li>
+                        <li>Maximum number of simultaneous wins in any round: <strong>{stats.winnersInAnyRoundMax}</strong></li>
                         </ul>
                         {results && results.playerSheetsForAllGames && results.playerSheetsForAllGames[0] ? (
                             <>
