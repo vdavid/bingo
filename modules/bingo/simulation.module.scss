@@ -38,14 +38,84 @@
   background-color: red;
 }
 
-.largeBingoSheets {
+@page {
+  margin: 0;
+  size: A4;
+}
 
+.largeBingoSheets {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+/* General styles */
+.pageContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  width: 190mm; /* A4 width */
+  height: 277mm; /* A4 height */
+  margin: 10mm auto;
+  page-break-after: always; /* Forces a new page after each container */
+}
+
+.pageContainer:last-child {
+  page-break-after: avoid;
+}
+
+.sheetContainer {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box; /* To include any border or padding in the element's total width and height */
+  border: 1px dashed #aaa; /* Dashed border around the whole page */
+
+  .sheetHeader {
+    width:70%;
+    margin-top:-0.3cm;
+  }
+
+  .bikeImage {
+    position:absolute;
+    bottom:0.5cm;
+    right:0.5cm;
+    width:1cm;
+    height: auto;
+  }
+
+  .bikeImage2 {
+    position:absolute;
+    bottom:0.5cm;
+    left:0.5cm;
+    width:1cm;
+    height: auto;
+  }
 }
 
 .largeBingoSheet {
-  border: 1px solid #333;
-  margin: 10px 0;
+  display: grid;
+  margin-top:-0.5cm;
+  margin-bottom:0.3cm;
+  grid-template-columns: repeat(5, 1fr); /* This will make 5 columns of equal width */
+  width: 90%;
+  height: 60%;
+}
+
+.row {
+  display: contents; /* This makes the div act as though it's not there, which can be useful for grid layouts */
+
+}
+
+.cell {
+  width: 25px;
+  height: 25px;
   text-align: center;
-  min-width: 60px;
-  page-break-after: always;
+  font-size: 1.7rem;
+  font-weight: bold;
+  border: 1px solid #aaa;
+  border-radius: 50%;
+  padding: 16px;
 }

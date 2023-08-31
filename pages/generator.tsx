@@ -1,9 +1,11 @@
-// @ts-ignore
-import DefaultLayout from '../../modules/site/DefaultLayout.tsx'
+import BingoLayout from '../../modules/bingo/BingoLayout'
 import { useEffect, useState } from 'react';
 import { runBingoSimulation, SimulationResult } from '../../modules/bingo/game'
 import LargeBingoSheet from '../../modules/bingo/LargeBingoSheet'
 import styles from '../../modules/bingo/simulation.module.scss'
+import headerPic from '../../public/wedding/d-d-wedding-header.svg'
+import bikePic from '../../public/wedding/bike-wireframe.png'
+import Image from 'next/image'
 
 const Page = () => {
     const [result, setResult] = useState<SimulationResult | null>(null);
@@ -13,26 +15,35 @@ const Page = () => {
         setResult(result);
     }, []);
 
+    const groupedSheets = [];
+    for (let i = 0; i < (result?.playerSheets.length || 0); i += 4) {
+        groupedSheets.push(result?.playerSheets.slice(i, i + 4));
+    }
+
     return (
-        <DefaultLayout title="Bingo Sheet Generator | David Veszelovszki" description="Let's play some Bingo." showThemeToggle={false}>
+        <BingoLayout>
             <main>
                 {result ? (
-                    <>
-                        <div className={styles.largeBingoSheets}>
-                            {result.playerSheets.map((sheet, i) => (
-                                <LargeBingoSheet key={i} sheet={sheet} size={5} />
-                            ))}
-                        </div>
-                        <p>Number of winners in each round:</p>
-                        <p>{result.winnerCountPerRound.join(',')}<br />
-                            Sum winners: {result.winnerCountPerRound.reduce( (a,b) => a + b, 0)}<br />
-                            Numbers: {result.pickedNumbers.join(', ')}</p>
-                    </>
+                    <div className={styles.largeBingoSheets}>
+                        {groupedSheets.map((group, idx) => (
+                            <div key={idx} className={styles.pageContainer}>
+                                {group?.map((sheet, i) => (
+                                    <div key={idx} className={styles.sheetContainer}>
+                                        <Image src={headerPic} alt="header" className={styles.sheetHeader} />
+                                        <Image src={bikePic} alt="bike" className={styles.bikeImage} />
+                                        <Image src={bikePic} alt="bike" className={styles.bikeImage2} />
+                                        <LargeBingoSheet key={i} sheet={sheet} size={5} />
+                                        <h1>bingo!</h1>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
                 ) : (
                     <p>Simulating game...</p>
                 )}
             </main>
-        </DefaultLayout>
+        </BingoLayout>
     );
 }
 

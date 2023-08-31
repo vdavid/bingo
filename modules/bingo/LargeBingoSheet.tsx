@@ -10,17 +10,15 @@ const LargeBingoSheet: React.FC<BingoSheetProps> = ({ sheet, size }) => {
     const rows = Array.from({length: size}, (_, i) => sheet.slice(i * size, (i + 1) * size));
 
     return (
-        <table className={styles.largeBingoSheet}>
-            <tbody>
+        <div className={styles.largeBingoSheet}>
             {rows.map((row, i) => (
-                <tr key={i}>
+                <div key={i} className={styles.row}>
                     {row.map((number, j) => (
-                        <td key={j}>{number}</td>
+                        <div key={j} className={styles.cell}>{number}</div>
                     ))}
-                </tr>
+                </div>
             ))}
-            </tbody>
-        </table>
+        </div>
     );
 }
 
