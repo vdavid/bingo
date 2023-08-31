@@ -81,9 +81,20 @@ const Page = () => {
             const currentTop = initialPosition.top + progress * (spotlightTarget.top - initialPosition.top);
             const currentLeft = initialPosition.left + progress * (spotlightTarget.left - initialPosition.left);
 
+            // Add circular searching effect
+            const circleRadius = 10 * (1 - progress);  // Radius starts large and decreases to zero as the animation progresses
+            const angularSpeed = 200.0;  // Adjusts the speed of circular motion
+            const angle = angularSpeed * elapsedTime;
+
+            const circleTopOffset = circleRadius * Math.sin(angle);
+            const circleLeftOffset = circleRadius * Math.cos(angle);
+
+            const circleTop = currentTop + circleTopOffset;
+            const circleLeft = currentLeft + circleLeftOffset;
+
             setSpotlightPosition({
-                top: currentTop,
-                left: currentLeft,
+                top: circleTop,
+                left: circleLeft,
             });
 
             if (progress < 1) {
