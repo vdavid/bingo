@@ -36,7 +36,7 @@
 
 @keyframes scaleDown {
   0% {
-    transform: translate(-50%, -50%) scale(10); /* start large */
+    transform: translate(-50%, -50%) scale(15); /* start large */
   }
   100% {
     transform: translate(-50%, -50%) scale(1); /* end normal size */
@@ -49,6 +49,6 @@
   width: 60px; /* Adjust to your desired end size */
   height: 60px;
   border-radius: 50%; /* Circle shape */
-  animation: scaleDown 5s forwards;
+  animation: scaleDown 4s forwards;
   pointer-events: none; /* This makes sure that the spotlight doesn't interfere with any clicks or hovers on elements below it */
 }

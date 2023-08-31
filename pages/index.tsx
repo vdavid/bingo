@@ -37,7 +37,7 @@ const Page = () => {
     const [spotlightTarget, setSpotlightTarget] = useState<Position | null>(null);
     const [spotlightPosition, setSpotlightPosition] = useState<Position>({ top: 50, left: 50 });
     const [showSpotlight, setShowSpotlight] = useState(false);
-    const animationDurationMs = 5000
+    const animationDurationMs = 4000
 
     useEffect(() => {
         let generatedPositions: Position[] = []
@@ -58,6 +58,7 @@ const Page = () => {
                     setCurrentNumberIndex(currentNumberIndex + 1);
                     setIsAnimating(false); // This won't hide the spotlight anymore
                 }, animationDurationMs); // animation duration
+                e.preventDefault();
             }
         };
 
@@ -110,6 +111,7 @@ const Page = () => {
               ))}
                     {showSpotlight && (
                         <div
+                            key={(spotlightTarget?.top || 0) * 100 + (spotlightTarget?.left || 0)} // use the index as a key
                             className={styles.spotlight}
                             style={{
                                 top: `${spotlightPosition.top}%`,
