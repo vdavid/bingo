@@ -36,6 +36,7 @@ const Page = () => {
     const [positions, setPositions] = useState<Position[]>([])
     const [spotlightTarget, setSpotlightTarget] = useState<Position | null>(null);
     const [spotlightPosition, setSpotlightPosition] = useState<Position>({ top: 50, left: 50 });
+    const [showSpotlight, setShowSpotlight] = useState(false);
     const animationDurationMs = 5000
 
     useEffect(() => {
@@ -50,14 +51,15 @@ const Page = () => {
         const handleSpacePress = (e: KeyboardEvent) => {
             if (e.key === ' ') {
                 setSpotlightTarget(positions[currentNumberIndex]);
-                setIsAnimating(true)
+                setIsAnimating(true);
+                setShowSpotlight(true); // Show the spotlight
                 setTimeout(() => {
-                    setCurrentNumber(randomNumbers[currentNumberIndex])
-                    setCurrentNumberIndex(currentNumberIndex + 1)
-                    setIsAnimating(false)
-                }, animationDurationMs) // animation duration
+                    setCurrentNumber(randomNumbers[currentNumberIndex]);
+                    setCurrentNumberIndex(currentNumberIndex + 1);
+                    setIsAnimating(false); // This won't hide the spotlight anymore
+                }, animationDurationMs); // animation duration
             }
-        }
+        };
 
         window.addEventListener('keydown', handleSpacePress)
         return () => window.removeEventListener('keydown', handleSpacePress)
@@ -91,6 +93,7 @@ const Page = () => {
         const animationHandle = requestAnimationFrame(animate);
 
         return () => cancelAnimationFrame(animationHandle); // Cleanup function to stop animation
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAnimating, spotlightTarget]);
 
 
@@ -105,7 +108,7 @@ const Page = () => {
                   {num}
                 </span>
               ))}
-                    {isAnimating && (
+                    {showSpotlight && (
                         <div
                             className={styles.spotlight}
                             style={{
