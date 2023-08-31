@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import randomNumbers from '../../modules/bingo/randomNumbers'
 import SimpleLayout from '../../modules/bingo/SimpleLayout'
 import styles from '../../modules/bingo/bingo.module.scss'
@@ -38,6 +38,7 @@ const Page = () => {
     const [spotlightPosition, setSpotlightPosition] = useState<Position>({ top: 50, left: 50 });
     const [showSpotlight, setShowSpotlight] = useState(false);
     const animationDurationMs = 4000
+    const [circularMotionSpeed, setCircularMotionSpeed] = useState(0)
 
     useEffect(() => {
         let generatedPositions: Position[] = []
@@ -47,24 +48,40 @@ const Page = () => {
         setPositions(generatedPositions)
     }, [])
 
+    const startAnimation = useCallback(() => {
+        setSpotlightTarget(positions[currentNumberIndex])
+        setIsAnimating(true)
+        setShowSpotlight(true) // Show the spotlight
+        setCircularMotionSpeed(0.002 + Math.random() * 0.005);
+        console.log(100 + Math.random() * 100);
+        setTimeout(() => {
+            setCurrentNumber(randomNumbers[currentNumberIndex])
+            setCurrentNumberIndex(currentNumberIndex + 1)
+            setIsAnimating(false) // This won't hide the spotlight anymore
+        }, animationDurationMs) // animation duration
+    }, [currentNumberIndex, positions])
+
     useEffect(() => {
         const handleSpacePress = (e: KeyboardEvent) => {
             if (e.key === ' ') {
-                setSpotlightTarget(positions[currentNumberIndex]);
-                setIsAnimating(true);
-                setShowSpotlight(true); // Show the spotlight
-                setTimeout(() => {
-                    setCurrentNumber(randomNumbers[currentNumberIndex]);
-                    setCurrentNumberIndex(currentNumberIndex + 1);
-                    setIsAnimating(false); // This won't hide the spotlight anymore
-                }, animationDurationMs); // animation duration
+                startAnimation();
                 e.preventDefault();
             }
         };
 
-        window.addEventListener('keydown', handleSpacePress)
-        return () => window.removeEventListener('keydown', handleSpacePress)
-    }, [currentNumberIndex, positions])
+        const handleClick = (e: MouseEvent) => {
+            startAnimation();
+            e.preventDefault();
+        };
+
+        window.addEventListener('keydown', handleSpacePress);
+        document.addEventListener('click', handleClick);  // listening for click event on the entire document
+
+        return () => {
+            window.removeEventListener('keydown', handleSpacePress);
+            document.removeEventListener('click', handleClick); // cleanup click event listener
+        }
+    }, [startAnimation]);
 
     useEffect(() => {
         if (!isAnimating || !spotlightTarget) return;
@@ -83,11 +100,8 @@ const Page = () => {
 
             // Add circular searching effect
             const circleRadius = 10 * (1 - progress);  // Radius starts large and decreases to zero as the animation progresses
-            const angularSpeed = 200.0;  // Adjusts the speed of circular motion
-            const angle = angularSpeed * elapsedTime;
-
-            const circleTopOffset = circleRadius * Math.sin(angle);
-            const circleLeftOffset = circleRadius * Math.cos(angle);
+            const circleTopOffset = circleRadius * Math.sin(circularMotionSpeed * elapsedTime);
+            const circleLeftOffset = circleRadius * Math.cos(circularMotionSpeed * elapsedTime);
 
             const circleTop = currentTop + circleTopOffset;
             const circleLeft = currentLeft + circleLeftOffset;
