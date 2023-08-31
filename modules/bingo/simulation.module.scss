@@ -37,3 +37,15 @@
 .bingoCell.winning {
   background-color: red;
 }
+
+.largeBingoSheets {
+
+}
+
+.largeBingoSheet {
+  border: 1px solid #333;
+  margin: 10px 0;
+  text-align: center;
+  min-width: 60px;
+  page-break-after: always;
+}

@@ -82,7 +82,6 @@ export function runBingoSimulation(seed: number, rangeMin: number, rangeMax: num
     let winnerCountPerRound: Array<number> = [];
     let pickedNumbersForSheets: Array<Array<number>> = [];
     let totalWinnerCount = 0;
-    let lastWin = -1;
 
     // Generate bingo sheets for each player
     for (let j = 0; j < playerCount; j++) {
@@ -116,7 +115,6 @@ export function runBingoSimulation(seed: number, rangeMin: number, rangeMax: num
         // If all players have won, stop checking.
         totalWinnerCount += roundWinnerCount;
         if (totalWinnerCount >= totalWins) {
-            lastWin = round;
             break;
         }
     }
@@ -125,7 +123,7 @@ export function runBingoSimulation(seed: number, rangeMin: number, rangeMax: num
         pickedNumbersForSheets,
         playerSheets,
         winnerCountPerRound,
-        pickedNumbers: allNumbers.slice(0, lastWin + 1)
+        pickedNumbers: allNumbers
     };
 }
 

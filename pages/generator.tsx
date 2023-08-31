@@ -2,12 +2,11 @@
 import DefaultLayout from '../../modules/site/DefaultLayout.tsx'
 import { useEffect, useState } from 'react';
 import { runBingoSimulation, SimulationResult } from '../../modules/bingo/game'
-import BingoSheet from '../../modules/bingo/BingoSheet'
+import LargeBingoSheet from '../../modules/bingo/LargeBingoSheet'
 import styles from '../../modules/bingo/simulation.module.scss'
 
 const Page = () => {
     const [result, setResult] = useState<SimulationResult | null>(null);
-    const simulationCount = 1;
 
     useEffect(() => {
         const result = runBingoSimulation(37, 1, 100, 5, 142, 10);
@@ -15,30 +14,22 @@ const Page = () => {
     }, []);
 
     return (
-        <DefaultLayout title="Bingo Simulation | David Veszelovszki" description="Let's play some Bingo.">
-            <header>
-                <h1>Bingo Simulation</h1>
-            </header>
+        <DefaultLayout title="Bingo Sheet Generator | David Veszelovszki" description="Let's play some Bingo." showThemeToggle={false}>
             <main>
-                {(result) ? (
+                {result ? (
                     <>
-                        {result && result.playerSheets && result.playerSheets[0] ? (
-                            <>
-                                <p>First 5 bingo sheets of the first game:</p>
-                                <div className={styles.bingoSheets}>
-                                    {result.playerSheets.slice(0, 5).map((sheet, i) => (
-                                        <BingoSheet key={i} sheet={sheet} size={5} pickedNumbers={result.pickedNumbersForSheets[i]} />
-                                    ))}
-                                </div>
-                            </>
-                        ) : null}
+                        <div className={styles.largeBingoSheets}>
+                            {result.playerSheets.map((sheet, i) => (
+                                <LargeBingoSheet key={i} sheet={sheet} size={5} />
+                            ))}
+                        </div>
                         <p>Number of winners in each round:</p>
                         <p>{result.winnerCountPerRound.join(',')}<br />
                             Sum winners: {result.winnerCountPerRound.reduce( (a,b) => a + b, 0)}<br />
                             Numbers: {result.pickedNumbers.join(', ')}</p>
                     </>
                 ) : (
-                    <p>Simulating {simulationCount} games...</p>
+                    <p>Simulating game...</p>
                 )}
             </main>
         </DefaultLayout>
