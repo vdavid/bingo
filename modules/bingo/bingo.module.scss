@@ -1,0 +1,54 @@
+.page {
+  background-color: black;
+  width: 100vw;  // full viewport width
+  height: 100vh; // full viewport height
+}
+
+.container {
+  position: absolute;
+  width: 90%;  // 10% less than full viewport width
+  height: 90%; // 10% less than full viewport height
+  top: 5%; // 5% vertical margin and horizontally centered
+  left: 5%;
+  margin: 0 auto;
+  background-color: black;
+  color:white;
+}
+
+.numberSpace {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.number {
+  position: absolute;
+  color: yellow;
+  font-size: 2rem;
+//  display: none;
+  opacity: 1;
+  width: 30px;
+  height: 30px;
+  padding: 15px; // To give space for the hazy circle effect
+  border-radius: 50%; // To ensure circle shape for the hazy effect
+  background-image: radial-gradient(circle, rgba(255, 255, 100, 0.3), transparent);
+}
+
+@keyframes scaleDown {
+  0% {
+    transform: translate(-50%, -50%) scale(10); /* start large */
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1); /* end normal size */
+  }
+}
+
+.spotlight {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.2); /* Light opacity for the spotlight */
+  width: 60px; /* Adjust to your desired end size */
+  height: 60px;
+  border-radius: 50%; /* Circle shape */
+  animation: scaleDown 5s forwards;
+  pointer-events: none; /* This makes sure that the spotlight doesn't interfere with any clicks or hovers on elements below it */
+}
