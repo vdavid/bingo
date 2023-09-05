@@ -4,46 +4,10 @@
   h1 { font-size: 1.8em; }
   h2 { margin: 1.5em 0 0.5em; font-size: 1.5em; }
   h3 { margin: 1.2em 0 0.5em; font-size: 1.2em; }
-}
 
-.bingoSheets {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-}
-
-.bingoSheet {
-  border: 1px solid #333;
-  margin: 10px 0;
-  text-align: center;
-  min-width: 60px;
-}
-
-.bingoSheet tbody tr td {
-  border: 1px solid #ddd;
-  padding: 5px;
-  font-weight: bold;
-}
-
-.bingoCell {
-  font-size: 0.8em;
-  border: 1px solid #ddd;
-  padding: 2px;
-  font-weight: bold;
-  border-radius: 50%;
-  width: 0.8em;
-  height: 1em;
-  line-height: 0.8em;
-  text-align: center;
-  margin: 0.5em;
-}
-
-.bingoCell.picked {
-  background-color: yellow;
-}
-
-.bingoCell.winning {
-  background-color: red;
 }
 
 @page {
@@ -51,18 +15,11 @@
   size: A4;
 }
 
-.largeBingoSheets {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
 /* General styles */
 .pageContainer {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
   width: 190mm; /* A4 width */
   height: 277mm; /* A4 height */
   margin: 10mm auto;
@@ -73,13 +30,15 @@
   page-break-after: avoid;
 }
 
-.sheetContainer {
+.cardContainer {
   display: flex;
   position: relative;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   box-sizing: border-box; /* To include any border or padding in the element's total width and height */
   border: 1px dashed #aaa; /* Dashed border around the whole page */
+  padding: 1cm;
 
   .sheetHeader {
     width:70%;
@@ -101,29 +60,19 @@
     width:1cm;
     height: auto;
   }
+
+  .cardText {
+    margin-top: 0.2cm;
+    line-height: 1.2em;
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  .cardNotes {
+    margin-top: 0.5cm;
+  }
 }
 
-.largeBingoSheet {
-  display: grid;
-  margin-top:-0.5cm;
-  margin-bottom:0.3cm;
-  grid-template-columns: repeat(5, 1fr); /* This will make 5 columns of equal width */
-  width: 90%;
-  height: 60%;
-}
-
-.row {
-  display: contents; /* This makes the div act as though it's not there, which can be useful for grid layouts */
-
-}
-
-.cell {
-  width: 25px;
-  height: 25px;
-  text-align: center;
-  font-size: 1.7rem;
-  font-weight: bold;
-  border: 1px solid #aaa;
-  border-radius: 50%;
-  padding: 16px;
+.cardContainer:nth-child(1), .cardContainer:nth-child(2), .cardContainer:nth-child(5), .cardContainer:nth-child(6) {
+  transform: rotate(180deg);
 }
