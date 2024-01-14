@@ -1,5 +1,4 @@
-// @ts-ignore
-import DefaultLayout from '../../modules/site/DefaultLayout.tsx'
+import DefaultLayout from '../../modules/site/DefaultLayout'
 import { useEffect, useState } from 'react';
 import { calculateSimulationStats, runBingoSimulations, SimulationResults, SimulationStats } from '../../modules/bingo/game'
 import BingoSheet from '../../modules/bingo/BingoSheet'
