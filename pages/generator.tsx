@@ -1,5 +1,5 @@
 import SimpleLayout from '../../modules/bingo/SimpleLayout'
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { runBingoSimulation, SimulationResult } from '../../modules/bingo/game'
 import LargeBingoSheet from '../../modules/bingo/LargeBingoSheet'
 import styles from '../../modules/bingo/simulation.module.scss'
@@ -7,18 +7,26 @@ import headerPic from '../../public/wedding/d-d-wedding-header.svg'
 import bikePic from '../../public/wedding/bike-wireframe.png'
 import Image from 'next/image'
 
-const Page = () => {
+const Page: React.FunctionComponent<React.PropsWithChildren> = () => {
     const [result, setResult] = useState<SimulationResult | null>(null);
+    const [groupedSheets, setGroupedSheets] = useState<Array<Array<Array<number>>>>([])
 
     useEffect(() => {
         const result = runBingoSimulation(37, 1, 100, 5, 142, 10);
         setResult(result);
     }, []);
 
-    const groupedSheets = [];
-    for (let i = 0; i < (result?.playerSheets.length || 0); i += 4) {
-        groupedSheets.push(result?.playerSheets.slice(i, i + 4));
-    }
+    useEffect(() => {
+        if (result?.playerSheets) { // Only calculate groupedSheets when result is available
+            const groups = []
+            for (let i = 0; i < result.playerSheets.length; i += 4) {
+                groups.push(result.playerSheets.slice(i, i + 4))
+            }
+            setGroupedSheets(groups)
+        } else {
+            setGroupedSheets([]) // Reset groupedSheets if result becomes null again (unlikely in this case, but good practice)
+        }
+    }, [result])
 
     return (
         <SimpleLayout>
