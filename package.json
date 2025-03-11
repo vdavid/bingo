@@ -1,0 +1,35 @@
+{
+  "name": "bingo",
+  "version": "1.0.0",
+  "description": "Bingo game and generator with wedding cards and simulation features",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bingo",
+    "next.js",
+    "react",
+    "wedding"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.6.2",
+  "dependencies": {
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "next": "^15.2.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sass": "^1.85.1",
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import randomNumbers from '../../modules/bingo/randomNumbers'
-import SimpleLayout from '../../modules/bingo/SimpleLayout'
-import styles from '../../modules/bingo/bingo.module.scss'
+import randomNumbers from '../modules/bingo/randomNumbers'
+import SimpleLayout from '../modules/bingo/SimpleLayout'
+import styles from '../modules/bingo/bingo.module.scss'
 
 type Position = { top: number; left: number };
 

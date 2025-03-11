@@ -1,8 +1,8 @@
-import DefaultLayout from '../../modules/site/DefaultLayout'
+import DefaultLayout from '../modules/bingo/DefaultLayout'
 import { useEffect, useState } from 'react';
-import { calculateSimulationStats, runBingoSimulations, SimulationResults, SimulationStats } from '../../modules/bingo/game'
-import BingoSheet from '../../modules/bingo/BingoSheet'
-import styles from '../../modules/bingo/simulation.module.scss'
+import { calculateSimulationStats, runBingoSimulations, SimulationResults, SimulationStats } from '../modules/bingo/game'
+import BingoSheet from '../modules/bingo/BingoSheet'
+import styles from '../modules/bingo/simulation.module.scss'
 
 const Page = () => {
     const [results, setResults] = useState<SimulationResults | null>(null);
