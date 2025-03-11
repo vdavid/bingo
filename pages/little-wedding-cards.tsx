@@ -1,6 +1,6 @@
 import SimpleLayout from '../modules/bingo/SimpleLayout'
 import styles from '../modules/bingo/littleWeddingCards.module.scss'
-import bikePic from '../public/wedding/bike-wireframe.png'
+import bikePic from '../public/bike-wireframe.png'
 import Image from 'next/image'
 
 type Card = {

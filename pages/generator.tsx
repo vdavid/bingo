@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { runBingoSimulation, SimulationResult } from '../modules/bingo/game'
 import LargeBingoSheet from '../modules/bingo/LargeBingoSheet'
 import styles from '../modules/bingo/simulation.module.scss'
-import headerPic from '../public/wedding/d-d-wedding-header.svg'
-import bikePic from '../public/wedding/bike-wireframe.png'
+import headerPic from '../public/d-d-wedding-header.svg'
+import bikePic from '../public/bike-wireframe.png'
 import Image from 'next/image'
 
 const Page: React.FunctionComponent<React.PropsWithChildren> = () => {
