@@ -130,7 +130,7 @@ const Page = () => {
                 <div className={styles.numberSpace}>
               {randomNumbers.map((num, index) => (
                   <span key={num} className={`${styles.number} ${num === currentNumber ? 'active' : ''}`}
-                        style={{ top: `calc(${positions[index]?.top}% - 30px)`, left: `calc(${positions[index]?.left}% - 30px)` }}>
+                        style={{ top: `${positions[index]?.top}%`, left: `${positions[index]?.left}%` }}>
                   {num}
                 </span>
               ))}

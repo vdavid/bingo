@@ -25,13 +25,15 @@
   position: absolute;
   color: yellow;
   font-size: 2rem;
-//  display: none;
   opacity: 1;
-  width: 30px;
-  height: 30px;
-  padding: 15px; // To give space for the hazy circle effect
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%; // To ensure circle shape for the hazy effect
-  background-image: radial-gradient(circle, rgba(255, 255, 100, 0.3), transparent);
+  background-image: radial-gradient(circle at center, rgba(255, 255, 100, 0.3) 30%, transparent 70%);
+  transform: translate(-50%, -50%); // Center the element at its position point
 }
 
 @keyframes scaleDown {
@@ -51,4 +53,5 @@
   border-radius: 50%; /* Circle shape */
   animation: scaleDown 4s forwards;
   pointer-events: none; /* This makes sure that the spotlight doesn't interfere with any clicks or hovers on elements below it */
+  transform: translate(-50%, -50%); /* Center the spotlight at its position point */
 }
