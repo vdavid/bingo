@@ -14,22 +14,26 @@ const Page = () => {
         <div className={styles.links}>
           <div className={styles.linkCard}>
             <h2><Link href="/game">Bingo game</Link></h2>
-            <p>Interactive bingo game with animated spotlight that searches for numbers. Click anywhere or press spacebar to call the next number.</p>
+            <p>Interactive bingo game with animated spotlight that searches for numbers. Click anywhere or press the space bar to call the next number.</p>
           </div>
-          
+
           <div className={styles.linkCard}>
             <h2><Link href="/generator">Bingo sheet generator</Link></h2>
             <p>Create and print customized bingo sheets for multiple players. Generates sheets with a wedding theme.</p>
           </div>
-          
-          <div className={styles.linkCard}>
-            <h2><Link href="/little-wedding-cards">Wedding cards</Link></h2>
-            <p>Generate food/info cards with dietary information (milk-free, gluten-free, sugar-free) for events.</p>
-          </div>
-          
+
           <div className={styles.linkCard}>
             <h2><Link href="/simulation">Game simulation</Link></h2>
             <p>Run statistical analyses of bingo games to see metrics like win rates, distribution, and patterns.</p>
+          </div>
+        </div>
+
+        <h2>Wedding utilities</h2>
+        <p>Haha, this is totally unrelated, but somehow ended up in this repo.</p>
+        <div className={styles.links}>
+          <div className={styles.linkCard}>
+            <h2><Link href="/little-wedding-cards">Wedding cards</Link></h2>
+            <p>Generate food/info cards with dietary information (milk-free, gluten-free, sugar-free) for events.</p>
           </div>
         </div>
       </main>

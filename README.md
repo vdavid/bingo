@@ -3,6 +3,9 @@
 A bingo game and sheet generator built with Next.js and React.
 Features include playable bingo games, printable bingo sheets, wedding cards, and game simulations.
 
+I made this for my wedding. It was a fun game. The design is sh*t but I only had about an hour for this,
+plus it was projected in a bright room so it was hard to see the details anyway.
+
 ## Features
 
 - **Interactive bingo game**: Play bingo with animated number calling
