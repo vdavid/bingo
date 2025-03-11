@@ -87,7 +87,7 @@ const cards: Card[] = [
 ]
 
 const groupedCards: Card[][] = []
-let cardCountPerPage = 4
+const cardCountPerPage = 4
 for (let i = 0; i < (cards.length || 0); i += cardCountPerPage) {
     const filledCards = cards.slice(i, i + cardCountPerPage);
     const emptyCards = Array(8).fill({ isFood: false, text: '' });

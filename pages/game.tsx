@@ -20,7 +20,7 @@ const generatePosition = (existingPositions: Position[], buffer: number): Positi
         left: Math.random() * 100,
     }
 
-    for (let pos of existingPositions) {
+    for (const pos of existingPositions) {
         if (doesCollide(newPosition, pos, buffer)) {
             return generatePosition(existingPositions, buffer - 0.5)
         }
@@ -41,7 +41,7 @@ const Page = () => {
     const [circularMotionSpeed, setCircularMotionSpeed] = useState(0)
 
     useEffect(() => {
-        let generatedPositions: Position[] = []
+        const generatedPositions: Position[] = []
         randomNumbers.forEach(() => {
             generatedPositions.push(generatePosition(generatedPositions, 15))
         })
