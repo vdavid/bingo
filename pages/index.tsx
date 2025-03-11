@@ -1,154 +1,40 @@
-import { useCallback, useEffect, useState } from 'react'
-import randomNumbers from '../modules/bingo/randomNumbers'
-import SimpleLayout from '../modules/bingo/SimpleLayout'
-import styles from '../modules/bingo/bingo.module.scss'
-
-type Position = { top: number; left: number };
-
-const doesCollide = (posA: Position, posB: Position, buffer: number): boolean => {
-    return (
-        posA.left < posB.left + buffer &&
-        posA.left + buffer > posB.left &&
-        posA.top < posB.top + buffer &&
-        posA.top + buffer > posB.top
-    )
-}
-
-const generatePosition = (existingPositions: Position[], buffer: number): Position => {
-    const newPosition: Position = {
-        top: Math.random() * 100,
-        left: Math.random() * 100,
-    }
-
-    for (let pos of existingPositions) {
-        if (doesCollide(newPosition, pos, buffer)) {
-            return generatePosition(existingPositions, buffer - 0.5)
-        }
-    }
-
-    return newPosition
-}
+import DefaultLayout from '../modules/bingo/DefaultLayout'
+import Link from 'next/link'
+import styles from '../modules/bingo/index.module.scss'
 
 const Page = () => {
-    const [currentNumberIndex, setCurrentNumberIndex] = useState<number>(0)
-    const [currentNumber, setCurrentNumber] = useState<number | null>(null)
-    const [isAnimating, setIsAnimating] = useState(false)
-    const [positions, setPositions] = useState<Position[]>([])
-    const [spotlightTarget, setSpotlightTarget] = useState<Position | null>(null);
-    const [spotlightPosition, setSpotlightPosition] = useState<Position>({ top: 50, left: 50 });
-    const [showSpotlight, setShowSpotlight] = useState(false);
-    const animationDurationMs = 4000
-    const [circularMotionSpeed, setCircularMotionSpeed] = useState(0)
-
-    useEffect(() => {
-        let generatedPositions: Position[] = []
-        randomNumbers.forEach(() => {
-            generatedPositions.push(generatePosition(generatedPositions, 15))
-        })
-        setPositions(generatedPositions)
-    }, [])
-
-    const startAnimation = useCallback(() => {
-        setSpotlightTarget(positions[currentNumberIndex])
-        setIsAnimating(true)
-        setShowSpotlight(true) // Show the spotlight
-        setCircularMotionSpeed(0.002 + Math.random() * 0.005);
-        console.log(100 + Math.random() * 100);
-        setTimeout(() => {
-            setCurrentNumber(randomNumbers[currentNumberIndex])
-            setCurrentNumberIndex(currentNumberIndex + 1)
-            setIsAnimating(false) // This won't hide the spotlight anymore
-        }, animationDurationMs) // animation duration
-    }, [currentNumberIndex, positions])
-
-    useEffect(() => {
-        const handleSpacePress = (e: KeyboardEvent) => {
-            if (e.key === ' ') {
-                startAnimation();
-                e.preventDefault();
-            }
-        };
-
-        const handleClick = (e: MouseEvent) => {
-            startAnimation();
-            e.preventDefault();
-        };
-
-        window.addEventListener('keydown', handleSpacePress);
-        document.addEventListener('click', handleClick);  // listening for click event on the entire document
-
-        return () => {
-            window.removeEventListener('keydown', handleSpacePress);
-            document.removeEventListener('click', handleClick); // cleanup click event listener
-        }
-    }, [startAnimation]);
-
-    useEffect(() => {
-        if (!isAnimating || !spotlightTarget) return;
-
-        const startTime = performance.now();
-        const duration = animationDurationMs; // 5 seconds
-
-        const initialPosition = { ...spotlightPosition };
-
-        const animate = (currentTime: number) => {
-            const elapsedTime = currentTime - startTime;
-            const progress = Math.min(elapsedTime / duration, 1);
-
-            const currentTop = initialPosition.top + progress * (spotlightTarget.top - initialPosition.top);
-            const currentLeft = initialPosition.left + progress * (spotlightTarget.left - initialPosition.left);
-
-            // Add circular searching effect
-            const circleRadius = 10 * (1 - progress);  // Radius starts large and decreases to zero as the animation progresses
-            const circleTopOffset = circleRadius * Math.sin(circularMotionSpeed * elapsedTime);
-            const circleLeftOffset = circleRadius * Math.cos(circularMotionSpeed * elapsedTime);
-
-            const circleTop = currentTop + circleTopOffset;
-            const circleLeft = currentLeft + circleLeftOffset;
-
-            setSpotlightPosition({
-                top: circleTop,
-                left: circleLeft,
-            });
-
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            }
-        };
-
-        const animationHandle = requestAnimationFrame(animate);
-
-        return () => cancelAnimationFrame(animationHandle); // Cleanup function to stop animation
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAnimating, spotlightTarget]);
-
-
-    return (
-        <SimpleLayout>
-            <div className={styles.page}>
-            <main className={styles.container}>
-                <div className={styles.numberSpace}>
-              {randomNumbers.map((num, index) => (
-                  <span key={num} className={`${styles.number} ${num === currentNumber ? 'active' : ''}`}
-                        style={{ top: `calc(${positions[index]?.top}% - 30px)`, left: `calc(${positions[index]?.left}% - 30px)` }}>
-                  {num}
-                </span>
-              ))}
-                    {showSpotlight && (
-                        <div
-                            key={(spotlightTarget?.top || 0) * 100 + (spotlightTarget?.left || 0)} // use the index as a key
-                            className={styles.spotlight}
-                            style={{
-                                top: `${spotlightPosition.top}%`,
-                                left: `${spotlightPosition.left}%`
-                            }}
-                        ></div>
-                    )}
-                </div>
-            </main>
-            </div>
-        </SimpleLayout>
-    )
+  return (
+    <DefaultLayout title="Bingo games and utilities" description="A collection of bingo games, generators, and utilities">
+      <header>
+        <h1>Bingo games and utilities</h1>
+      </header>
+      <main>
+        <p>Welcome to the bingo application. Choose from the following features:</p>
+        
+        <div className={styles.links}>
+          <div className={styles.linkCard}>
+            <h2><Link href="/game">Bingo game</Link></h2>
+            <p>Interactive bingo game with animated spotlight that searches for numbers. Click anywhere or press spacebar to call the next number.</p>
+          </div>
+          
+          <div className={styles.linkCard}>
+            <h2><Link href="/generator">Bingo sheet generator</Link></h2>
+            <p>Create and print customized bingo sheets for multiple players. Generates sheets with a wedding theme.</p>
+          </div>
+          
+          <div className={styles.linkCard}>
+            <h2><Link href="/little-wedding-cards">Wedding cards</Link></h2>
+            <p>Generate food/info cards with dietary information (milk-free, gluten-free, sugar-free) for events.</p>
+          </div>
+          
+          <div className={styles.linkCard}>
+            <h2><Link href="/simulation">Game simulation</Link></h2>
+            <p>Run statistical analyses of bingo games to see metrics like win rates, distribution, and patterns.</p>
+          </div>
+        </div>
+      </main>
+    </DefaultLayout>
+  )
 }
 
 export default Page
