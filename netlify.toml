@@ -1,0 +1,12 @@
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NPM_FLAGS = "--version"
+  # Tell Netlify to use pnpm
+  NPM_VERSION = "10.6.2"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

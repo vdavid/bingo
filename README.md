@@ -32,6 +32,8 @@ pnpm dev
 
 ### Production deployment
 
+#### Local production build
+
 ```bash
 # Build the application
 pnpm build
@@ -39,6 +41,62 @@ pnpm build
 # Start the production server
 pnpm start
 ```
+
+#### Netlify deployment
+
+This project is set up for easy deployment with Netlify:
+
+1. Push your changes to a GitHub repository
+2. Connect your repository to Netlify
+3. Netlify will automatically detect the Next.js configuration
+4. The site will be built and deployed with each push to the main branch
+
+##### Manual deployment
+
+You can also deploy manually using the Netlify CLI:
+
+```bash
+# Install Netlify CLI globally
+npm install -g netlify-cli
+
+# Login to Netlify
+netlify login
+
+# Initialize a new Netlify site (first time only)
+netlify init
+
+# Deploy to Netlify
+netlify deploy --prod
+```
+
+##### Testing before deployment
+
+Run these commands to verify everything works before deploying:
+
+```bash
+# Install dependencies (if not already installed)
+pnpm install
+
+# Run tests
+pnpm test
+
+# Lint code
+pnpm lint
+
+# Build for production
+pnpm build
+```
+
+The test suite includes:
+- Basic verification that the app renders correctly
+- Simple tests for core functionality
+
+To run tests:
+```bash
+pnpm test
+```
+
+If you add new features, please also add appropriate tests in the `__tests__` directory.
 
 ## Technical details
 
