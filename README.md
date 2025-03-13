@@ -17,32 +17,10 @@ plus it was projected in a bright room so it was hard to see the details anyway.
 
 ### Prerequisites
 
-- Node.js (version 22 or higher)
-- pnpm (version 10 or higher) - **Required**: This project uses pnpm.
+- Node.js (version 22+)
+- pnpm (version 10+)
 
-### Installation
-
-```bash
-# Install dependencies
-pnpm install
-
-# Start the development server
-pnpm dev
-```
-
-### Production deployment
-
-#### Local production build
-
-```bash
-# Build the application
-pnpm build
-
-# Start the production server
-pnpm start
-```
-
-#### Netlify deployment
+## Development and deployment
 
 This project is set up for easy deployment with Netlify:
 
@@ -50,7 +28,8 @@ This project is set up for easy deployment with Netlify:
 2. `pnpm lint` - Lint code
 3. `pnpm test` - Run tests
 4. `pnpm dev` - Start the development server and verify everything works
-5. Push changes to a GitHub repository. Netlify will auto-update.
+5. `pnpm build && pnpm start` - Build and start the production server
+6. Push changes to a GitHub repository. Netlify will auto-update.
 
 If you add new features, please also add appropriate tests in the `__tests__` directory.
 
