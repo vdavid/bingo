@@ -26,7 +26,7 @@ plus it was projected in a bright room so it was hard to see the details anyway.
 # Install dependencies
 pnpm install
 
-# Start the development server on port 3001.
+# Start the development server
 pnpm dev
 ```
 
